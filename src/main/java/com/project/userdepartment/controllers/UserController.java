@@ -3,6 +3,7 @@ package com.project.userdepartment.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.userdepartment.dto.UserRequestDTO;
 import com.project.userdepartment.dto.UserResponseDTO;
 import com.project.userdepartment.entities.User;
 import com.project.userdepartment.service.UserService;
@@ -39,15 +39,21 @@ public class UserController {
 				originalUser.getDepartment());
 	}
 
-	@PostMapping
-	public UserResponseDTO createUser(@RequestBody UserRequestDTO userDto) {
-		User createdUser = userService.createUser(new User(userDto.getId(), userDto.getName(), userDto.getEmail(),
-				userDto.getCpf(), userDto.getDepartment()));
+//	@PostMapping
+//	public UserResponseDTO createUser(@RequestBody @Validated UserRequestDTO userDto) {
+//		User createdUser = userService.createUser(new User(userDto.getId(), userDto.getName(), userDto.getEmail(),
+//				userDto.getCpf(), userDto.getDepartment()));
+//
+//		return new UserResponseDTO(createdUser.getId(), createdUser.getName(), createdUser.getEmail(),
+//				createdUser.getDepartment());
+//	}
 
-		return new UserResponseDTO(createdUser.getId(), createdUser.getName(), createdUser.getEmail(),
-				createdUser.getDepartment());
+	@PostMapping
+	public ResponseEntity<String> createUser(@RequestBody User user) {
+		userService.createUser(user);
+		return ResponseEntity.ok("Usuário criado com sucesso!");
 	}
-	
+
 	@DeleteMapping(value = "/{id}")
 	public void deleteUser(@PathVariable Long id) {
 		userService.deleteUser(id);

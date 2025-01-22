@@ -2,11 +2,17 @@ package com.project.userdepartment.dto;
 
 import com.project.userdepartment.entities.Department;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 public class UserRequestDTO {
 
 	private Long id;
 	private String name;
 	private String email;
+	
+	@NotNull(message = "campo CPF é obrigatório")
+	@NotEmpty(message = "campo CPF não pode estar vazio")
 	private String cpf;
 	private Department department;
 
