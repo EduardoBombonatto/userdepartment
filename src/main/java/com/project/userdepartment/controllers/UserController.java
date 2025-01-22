@@ -3,7 +3,9 @@ package com.project.userdepartment.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.userdepartment.dto.UserRequestDTO;
 import com.project.userdepartment.dto.UserResponseDTO;
 import com.project.userdepartment.entities.User;
 import com.project.userdepartment.service.UserService;
+import com.project.userdepartment.utils.ApiResponse;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -49,9 +53,15 @@ public class UserController {
 //	}
 
 	@PostMapping
-	public ResponseEntity<String> createUser(@RequestBody User user) {
-		userService.createUser(user);
-		return ResponseEntity.ok("Usuário criado com sucesso!");
+	public ResponseEntity<ApiResponse<UserResponseDTO>> createUser(@RequestBody @Validated UserRequestDTO userDto) {
+
+		User createdUser = userService.createUser(new User(userDto.getId(), userDto.getName(), userDto.getEmail(),
+				userDto.getCpf(), userDto.getDepartment()));
+		
+		UserResponseDTO returnedUser = new UserResponseDTO(createdUser.getId(), createdUser.getName(), createdUser.getEmail(),
+			createdUser.getDepartment());
+		
+		return ResponseEntity.ok(new ApiResponse<UserResponseDTO>(HttpStatus.OK,"Usuário criado com sucesso", returnedUser));
 	}
 
 	@DeleteMapping(value = "/{id}")
