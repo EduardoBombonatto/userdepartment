@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.userdepartment.entities.User;
 import com.project.userdepartment.exceptions.DepartmentNotFound;
+import com.project.userdepartment.exceptions.UserNotFound;
 import com.project.userdepartment.exceptions.UserWithCpfAlreadyExists;
 import com.project.userdepartment.exceptions.UserWithEmailAlreadyExists;
 import com.project.userdepartment.repositories.DepartmentRepository;
@@ -40,6 +41,10 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User getUserById(Long id) {
+		if(!userRepository.existsById(id)) {
+			throw new UserNotFound();
+		}
+		
 		return userRepository.findById(id).get();
 	}
 
@@ -50,6 +55,10 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void deleteUser(Long id) {
+		if(!userRepository.existsById(id)) {
+			throw new UserNotFound();
+		}
+		
 		userRepository.deleteById(id);
 	}
 }

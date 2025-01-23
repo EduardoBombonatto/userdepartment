@@ -43,25 +43,17 @@ public class UserController {
 				originalUser.getDepartment());
 	}
 
-//	@PostMapping
-//	public UserResponseDTO createUser(@RequestBody @Validated UserRequestDTO userDto) {
-//		User createdUser = userService.createUser(new User(userDto.getId(), userDto.getName(), userDto.getEmail(),
-//				userDto.getCpf(), userDto.getDepartment()));
-//
-//		return new UserResponseDTO(createdUser.getId(), createdUser.getName(), createdUser.getEmail(),
-//				createdUser.getDepartment());
-//	}
-
 	@PostMapping
 	public ResponseEntity<ApiResponse<UserResponseDTO>> createUser(@RequestBody @Validated UserRequestDTO userDto) {
 
 		User createdUser = userService.createUser(new User(userDto.getId(), userDto.getName(), userDto.getEmail(),
 				userDto.getCpf(), userDto.getDepartment()));
-		
-		UserResponseDTO returnedUser = new UserResponseDTO(createdUser.getId(), createdUser.getName(), createdUser.getEmail(),
-			createdUser.getDepartment());
-		
-		return ResponseEntity.ok(new ApiResponse<UserResponseDTO>(HttpStatus.OK,"Usuário criado com sucesso", returnedUser));
+
+		UserResponseDTO returnedUser = new UserResponseDTO(createdUser.getId(), createdUser.getName(),
+				createdUser.getEmail(), createdUser.getDepartment());
+
+		return ResponseEntity
+				.ok(new ApiResponse<UserResponseDTO>(HttpStatus.OK, "Usuário criado com sucesso", returnedUser));
 	}
 
 	@DeleteMapping(value = "/{id}")
