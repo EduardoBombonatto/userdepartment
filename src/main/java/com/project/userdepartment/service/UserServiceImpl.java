@@ -41,10 +41,10 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User getUserById(Long id) {
-		if(!userRepository.existsById(id)) {
+		if (!userRepository.existsById(id)) {
 			throw new UserNotFound();
 		}
-		
+
 		return userRepository.findById(id).get();
 	}
 
@@ -54,11 +54,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void deleteUser(Long id) {
-		if(!userRepository.existsById(id)) {
+	public User deleteUser(Long id) {
+		if (!userRepository.existsById(id)) {
 			throw new UserNotFound();
 		}
-		
+
+		User user = this.getUserById(id);
 		userRepository.deleteById(id);
+		
+		return user;
 	}
 }

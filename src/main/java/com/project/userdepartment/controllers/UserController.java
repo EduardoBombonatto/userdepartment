@@ -45,7 +45,6 @@ public class UserController {
 
 	@PostMapping
 	public ResponseEntity<ApiResponse<UserResponseDTO>> createUser(@RequestBody @Validated UserRequestDTO userDto) {
-
 		User createdUser = userService.createUser(new User(userDto.getId(), userDto.getName(), userDto.getEmail(),
 				userDto.getCpf(), userDto.getDepartment()));
 
@@ -57,7 +56,13 @@ public class UserController {
 	}
 
 	@DeleteMapping(value = "/{id}")
-	public void deleteUser(@PathVariable Long id) {
-		userService.deleteUser(id);
+	public ResponseEntity<ApiResponse<UserResponseDTO>> deleteUser(@PathVariable Long id) {
+		User deletedUser = userService.deleteUser(id);
+
+		UserResponseDTO returnedUser = new UserResponseDTO(deletedUser.getId(), deletedUser.getName(),
+				deletedUser.getEmail(), deletedUser.getDepartment());
+
+		return ResponseEntity
+				.ok(new ApiResponse<UserResponseDTO>(HttpStatus.OK, "Usuário excluído com sucesso", returnedUser));
 	}
 }
