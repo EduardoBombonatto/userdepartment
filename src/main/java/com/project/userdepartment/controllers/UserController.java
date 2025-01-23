@@ -37,17 +37,19 @@ public class UserController {
 	}
 
 	@GetMapping(value = "/{id}")
-	public UserResponseDTO getUserById(@PathVariable("id") Long id) {
+	public ResponseEntity<ApiResponse<UserResponseDTO>> getUserById(@PathVariable("id") Long id) {
 		User originalUser = userService.getUserById(id);
-		return new UserResponseDTO(originalUser.getId(), originalUser.getName(), originalUser.getEmail(),
-				originalUser.getDepartment());
+		UserResponseDTO returnedUser = new UserResponseDTO(originalUser.getId(), originalUser.getName(),
+				originalUser.getEmail(), originalUser.getDepartment());
+		
+		return ResponseEntity
+				.ok(new ApiResponse<UserResponseDTO>(HttpStatus.OK, "Usuário retornado com sucesso", returnedUser));
 	}
 
 	@PostMapping
 	public ResponseEntity<ApiResponse<UserResponseDTO>> createUser(@RequestBody @Validated UserRequestDTO userDto) {
 		User createdUser = userService.createUser(new User(userDto.getId(), userDto.getName(), userDto.getEmail(),
 				userDto.getCpf(), userDto.getDepartment()));
-
 		UserResponseDTO returnedUser = new UserResponseDTO(createdUser.getId(), createdUser.getName(),
 				createdUser.getEmail(), createdUser.getDepartment());
 
@@ -58,7 +60,6 @@ public class UserController {
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<ApiResponse<UserResponseDTO>> deleteUser(@PathVariable Long id) {
 		User deletedUser = userService.deleteUser(id);
-
 		UserResponseDTO returnedUser = new UserResponseDTO(deletedUser.getId(), deletedUser.getName(),
 				deletedUser.getEmail(), deletedUser.getDepartment());
 

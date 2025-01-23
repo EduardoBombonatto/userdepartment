@@ -1,19 +1,15 @@
-package com.project.userdepartment.advice;
+package com.project.userdepartment.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.project.userdepartment.exceptions.DepartmentNotFound;
-import com.project.userdepartment.exceptions.UserNotFound;
-import com.project.userdepartment.exceptions.UserWithCpfAlreadyExists;
-import com.project.userdepartment.exceptions.UserWithEmailAlreadyExists;
 import com.project.userdepartment.utils.ApiResponse;
 
-@ControllerAdvice
-public class RestExceptionHandler extends ResponseEntityExceptionHandler{
+@RestControllerAdvice
+public class UserExceptionHandler extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(UserWithCpfAlreadyExists.class)
 	private ResponseEntity<ApiResponse<Object>> userWithCpfAlreadyExistHandler(UserWithCpfAlreadyExists exception){
