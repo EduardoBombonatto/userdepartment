@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.userdepartment.entities.Department;
+import com.project.userdepartment.exceptions.DepartmentNotFound;
 import com.project.userdepartment.repositories.DepartmentRepository;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
-
 
 	@Autowired
 	private DepartmentRepository departmentRepository;
@@ -22,6 +22,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	@Override
 	public Department getDepartmentById(Long id) {
+		if (!departmentRepository.existsById(id)) {
+			throw new DepartmentNotFound();
+		}
 		return departmentRepository.findById(id).get();
 	}
 
@@ -31,7 +34,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 
 	@Override
-	public void deleteDepartment(Long id) {
+	public Department deleteDepartment(Long id) {
+		if (!departmentRepository.existsById(id)) {
+			throw new DepartmentNotFound();
+		}
+
+		Department dept = this.getDepartmentById(id);
 		departmentRepository.deleteById(id);
+		return dept;
 	}
 }

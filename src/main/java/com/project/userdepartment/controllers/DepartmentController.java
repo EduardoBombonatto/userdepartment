@@ -3,6 +3,8 @@ package com.project.userdepartment.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import com.project.userdepartment.dto.DepartmentRequestDTO;
 import com.project.userdepartment.dto.DepartmentResponseDTO;
 import com.project.userdepartment.entities.Department;
 import com.project.userdepartment.service.DepartmentService;
+import com.project.userdepartment.utils.ApiResponse;
 
 @RestController
 @RequestMapping(value = "/departments")
@@ -31,20 +34,33 @@ public class DepartmentController {
 	}
 
 	@GetMapping(value = "/{id}")
-	public DepartmentResponseDTO getDepartmentById(@PathVariable Long id) {
+	public ResponseEntity<ApiResponse<DepartmentResponseDTO>> getDepartmentById(@PathVariable Long id) {
 		Department originalDepartment = departmentService.getDepartmentById(id);
-		return new DepartmentResponseDTO(originalDepartment.getId(), originalDepartment.getName());
+		DepartmentResponseDTO returnedDeparment = new DepartmentResponseDTO(originalDepartment.getId(),
+				originalDepartment.getName());
+
+		return ResponseEntity.ok(new ApiResponse<DepartmentResponseDTO>(HttpStatus.OK, "Usuário retornado com sucesso",
+				returnedDeparment));
 	}
 
 	@PostMapping
-	public DepartmentResponseDTO createDepartment(@RequestBody DepartmentRequestDTO departmentDto) {
+	public ResponseEntity<ApiResponse<DepartmentResponseDTO>> createDepartment(@RequestBody DepartmentRequestDTO departmentDto) {
 		Department originalDepartment = departmentService
 				.createDepartment(new Department(departmentDto.getId(), departmentDto.getName()));
-		return new DepartmentResponseDTO(originalDepartment.getId(), originalDepartment.getName());
+		DepartmentResponseDTO returnedDeparment = new DepartmentResponseDTO(originalDepartment.getId(),
+				originalDepartment.getName());
+		
+		return ResponseEntity.ok(new ApiResponse<DepartmentResponseDTO>(HttpStatus.OK, "Usuário retornado com sucesso",
+				returnedDeparment));
 	}
 
 	@DeleteMapping(value = "/{id}")
-	public void deleteDepartment(Long id) {
-		departmentService.deleteDepartment(id);
+	public ResponseEntity<ApiResponse<DepartmentResponseDTO>> deleteDepartment(Long id) {
+		Department deletedDepartment = departmentService.deleteDepartment(id);
+		DepartmentResponseDTO returnedDeparment = new DepartmentResponseDTO(deletedDepartment.getId(),
+				deletedDepartment.getName());
+
+		return ResponseEntity.ok(new ApiResponse<DepartmentResponseDTO>(HttpStatus.OK, "Usuário retornado com sucesso",
+				returnedDeparment));
 	}
 }
